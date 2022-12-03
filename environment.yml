@@ -1,0 +1,17 @@
+name: excel-to-labels
+channels:
+  - defaults
+dependencies:
+  - python=3.6
+  - pip
+  - pytest
+  - cython
+  - numpy
+  - pandas
+  - matplotlib
+  - tqdm
+  - pyyaml
+  - conda-forge::dacite
+  - openpyxl
+  - pip:
+    - fpdf
