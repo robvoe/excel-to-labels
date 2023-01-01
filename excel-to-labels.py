@@ -6,7 +6,7 @@ from fpdf import FPDF
 
 
 def excel_to_labels(input_xlsx: Path, output_pdf: Path, cell_width_mm: float = 40, cell_height_mm: float = 22,
-                    cell_margin_mm: float = 3, cell_frame: bool = True) -> None:
+                    cell_margin_mm: float = 3, cell_frame: bool = True, font_size: int = 9) -> None:
     assert input_xlsx.is_file(), f"Input XLSX '{input_xlsx}' does not exist or is no file!"
     df: pd.DataFrame = pd.read_excel(input_xlsx, index_col=None, engine="openpyxl", convert_float=False, dtype=str)
     df.columns = [c.lower() for c in df.columns]
@@ -24,7 +24,7 @@ def excel_to_labels(input_xlsx: Path, output_pdf: Path, cell_width_mm: float = 4
     # Print our labels
     pdf_generator = FPDF(orientation="P", unit="mm", format="A4")
     pdf_generator.set_margins(left=20, top=10, right=10)
-    pdf_generator.set_font("Arial", "B", 7)
+    pdf_generator.set_font("Arial", "B", font_size)
     pdf_generator.add_page()
     x_start, y_start = pdf_generator.get_x(), pdf_generator.get_y()
 
@@ -61,12 +61,13 @@ if __name__ == '__main__':
     _parser.add_argument("input", default=str(_default_input_file), type=str, nargs="?",
                          help="The input Excel file. Should follow the format of 'template.xlsx'.")
     _parser.add_argument("output", type=str, default="output.pdf", nargs="?", help="The output PDF file.")
-    _parser.add_argument("-width", "--cell_width_mm", type=float, default=40,
+    _parser.add_argument("-width", "--cell_width_mm", type=float, default=50,
                          help="Width (mm) of each single label cell.")
-    _parser.add_argument("-height", "--cell_height_mm", type=float, default=22,
+    _parser.add_argument("-height", "--cell_height_mm", type=float, default=26,
                          help="Height (mm) of each single label cell.")
     _parser.add_argument("-margin", "--cell_margin_mm", type=float, default=3,
                          help="Margin (mm) between text and label cell frame.")
+    _parser.add_argument("--font_size", "-f", type=int, default=9, help="Font size.")
     _parser.add_argument("--no_frame", action="store_true", help="No frame around label cells.")
     args = _parser.parse_args()
 
